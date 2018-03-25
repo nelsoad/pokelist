@@ -2,8 +2,10 @@ const path = require('path');
 const axios = require('axios');
 const express = require('express');
 const app = express();
+const expressLess = require('express-less');
 
 app.use('/js', express.static(path.join(__dirname, 'js/dist')));
+app.use('/css', expressLess(path.join(__dirname, 'less')));
 
 app.get('/', (request, response) => {
     return response.sendFile(path.join(__dirname, '/html/index.html'));
