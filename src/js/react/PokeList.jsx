@@ -7,8 +7,13 @@ class PokeList extends React.Component {
         super();
 
         this.state = {
-            list: []
+            list: [],
+            filter: ""
         };
+    }
+
+    updateFilter(event) {
+        this.setState({filter: event.target.value});
     }
 
     componentDidMount() {
@@ -16,18 +21,26 @@ class PokeList extends React.Component {
 
         axios.get('/all')
             .then(response => {
-                self.setState({list: response.data.results});
+                var sortedList = response.data.results.sort((a, b) => {
+                    return a.name.localeCompare(b.name);
+                });
+
+                self.setState({list: sortedList});
             });
     }
 
     renderList() {
-        return this.state.list.map(e => {
+        var list = this.state.list;
+        var filter = this.state.filter;
+
+        if(filter.length > 0) {
+            list = list.filter(e => e.name.includes(filter));
+        }
+
+        return list.map(e => {
             return (
                 <li>
                     <div className="pokemon-entry">
-                        <div className="pokemon-number">
-                            {e.number}
-                        </div>
                         <div className="pokemon-image">
                             <img src={e.imageUrl} alt={e.name}/>
                         </div>
@@ -42,9 +55,12 @@ class PokeList extends React.Component {
 
     render() {
         return (
-            <ul className="pokemon-list">
-                {this.renderList()}
-            </ul>
+            <div>
+                <input type="text" value={this.state.filter} onChange={this.updateFilter.bind(this)}></input>
+                <ul className="pokemon-list">
+                    {this.renderList()}
+                </ul>
+            </div>
         );
     }
 }
