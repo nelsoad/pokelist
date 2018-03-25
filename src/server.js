@@ -3,6 +3,8 @@ const axios = require('axios');
 const express = require('express');
 const app = express();
 
+app.use('/js', express.static(path.join(__dirname, 'js/dist')));
+
 app.get('/', (request, response) => {
     return response.sendFile(path.join(__dirname, '/html/index.html'));
 });
