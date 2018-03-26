@@ -8,13 +8,17 @@ class PokeList extends React.Component {
 
         this.state = {
             list: [],
-            filter: "",
+            filter: '',
             loading: true
         };
     }
 
     updateFilter(event) {
         this.setState({filter: event.target.value});
+    }
+
+    clearFilter() {
+        this.setState({filter: ''});
     }
 
     lazyLoad() {
@@ -67,6 +71,19 @@ class PokeList extends React.Component {
 
         if(filter.length > 0) {
             list = list.filter(e => e.name.includes(filter));
+        }
+
+        if(list.length === 0) {
+            return (
+                <li className="loading-container">
+                    <div>
+                        No entries were found on filter: {this.state.filter}
+                    </div>
+                    <button className="clear-filter-button" onClick={this.clearFilter.bind(this)}>
+                        Clear filter
+                    </button>
+                </li>
+            );
         }
 
         return list.map(e => {
