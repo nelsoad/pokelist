@@ -115,6 +115,9 @@ class PokeList extends React.Component {
 
         return (
             <div className="page-container">
+                <h1 class="list-h1">
+                    Pokemon List
+                </h1>
                 <input 
                     type="text" 
                     className="pokemon-filter" 
