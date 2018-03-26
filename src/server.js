@@ -5,6 +5,7 @@ const app = express();
 const expressLess = require('express-less');
 
 app.use('/js', express.static(path.join(__dirname, 'js/dist')));
+app.use('/img', express.static(path.join(__dirname, 'img')));
 app.use('/css', expressLess(path.join(__dirname, 'less')));
 
 app.get('/', (request, response) => {

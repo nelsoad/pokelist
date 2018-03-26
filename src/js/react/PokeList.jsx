@@ -8,7 +8,8 @@ class PokeList extends React.Component {
 
         this.state = {
             list: [],
-            filter: ""
+            filter: "",
+            loading: true
         };
     }
 
@@ -23,8 +24,17 @@ class PokeList extends React.Component {
                     return a.name.localeCompare(b.name);
                 });
 
-                this.setState({list: sortedList});
+                this.setState({list: sortedList, loading: false});
             });
+    }
+
+    renderLoadingContent() {
+        return (
+            <li className="loading-container">
+                <div className="loading-text">Loading Pokémon List</div>
+                <img src="/img/loading.gif" alt="loading"/>
+            </li>
+        );
     }
 
     //return html for all of the pokemon in the list
@@ -53,6 +63,16 @@ class PokeList extends React.Component {
     }
 
     render() {
+
+        var listContent = null;
+
+        if(this.state.loading) {
+            listContent = this.renderLoadingContent();
+        }
+        else {
+            listContent = this.renderList();
+        }
+
         return (
             <div className="page-container">
                 <input 
@@ -63,7 +83,7 @@ class PokeList extends React.Component {
                     placeholder="Enter a name">
                 </input>
                 <ul className="pokemon-list">
-                    {this.renderList()}
+                    {listContent}
                 </ul>
             </div>
         );
