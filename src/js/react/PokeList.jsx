@@ -17,18 +17,17 @@ class PokeList extends React.Component {
     }
 
     componentDidMount() {
-        var self = this;
-
         axios.get('/all')
             .then(response => {
                 var sortedList = response.data.results.sort((a, b) => {
                     return a.name.localeCompare(b.name);
                 });
 
-                self.setState({list: sortedList});
+                this.setState({list: sortedList});
             });
     }
 
+    //return html for all of the pokemon in the list
     renderList() {
         var list = this.state.list;
         var filter = this.state.filter;
@@ -55,8 +54,14 @@ class PokeList extends React.Component {
 
     render() {
         return (
-            <div>
-                <input type="text" value={this.state.filter} onChange={this.updateFilter.bind(this)}></input>
+            <div className="page-container">
+                <input 
+                    type="text" 
+                    className="pokemon-filter" 
+                    value={this.state.filter} 
+                    onChange={this.updateFilter.bind(this)}
+                    placeholder="Enter a name">
+                </input>
                 <ul className="pokemon-list">
                     {this.renderList()}
                 </ul>
