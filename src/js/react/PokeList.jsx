@@ -17,7 +17,26 @@ class PokeList extends React.Component {
         this.setState({filter: event.target.value});
     }
 
+    lazyLoad() {
+        var loadPositionOffset = 100;
+        var images = document.querySelectorAll('img[data-src]');
+
+        for(var i = 0; i < images.length; i++)
+        {
+            var rect = images[i].getBoundingClientRect();
+
+            if(rect.y >= -loadPositionOffset && rect.y <= window.innerHeight + loadPositionOffset)
+            {
+                images[i].src = images[i].dataset.src;
+                delete images[i].dataset.src;
+            }
+        }
+    }
+
     componentDidMount() {
+
+        window.addEventListener('scroll', this.lazyLoad);
+
         axios.get('/all')
             .then(response => {
                 var sortedList = response.data.results.sort((a, b) => {
@@ -26,6 +45,10 @@ class PokeList extends React.Component {
 
                 this.setState({list: sortedList, loading: false});
             });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        this.lazyLoad();
     }
 
     renderLoadingContent() {
@@ -51,7 +74,7 @@ class PokeList extends React.Component {
                 <li>
                     <div className="pokemon-entry">
                         <div className="pokemon-image">
-                            <img src={e.imageUrl} alt={e.name}/>
+                            <img data-src={e.imageUrl} alt={e.name}/>
                         </div>
                         <div className="pokemon-name">
                             {e.name}

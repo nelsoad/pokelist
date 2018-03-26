@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const express = require('express');
@@ -13,6 +14,7 @@ app.get('/', (request, response) => {
 });
 
 app.get('/all', (request, response) => {
+
     var apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=802';
 
     axios.get(apiUrl)
